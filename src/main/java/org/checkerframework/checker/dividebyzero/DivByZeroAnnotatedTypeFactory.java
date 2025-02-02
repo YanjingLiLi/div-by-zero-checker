@@ -26,14 +26,31 @@ public class DivByZeroAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
    */
   private Class<? extends Annotation> defaultAnnotation(LiteralTree literal) {
     switch (literal.getKind()) {
-      case INT_LITERAL:
-        int intValue = (Integer) literal.getValue();
-        // TODO
-        break;
-      case LONG_LITERAL:
-        long longValue = (Long) literal.getValue();
-        // TODO
-        break;
+      case INT_LITERAL: {
+          int intValue = (Integer) literal.getValue();
+          if (intValue == 0) {
+            return Zero.class;
+          } 
+          if (intValue > 0) {
+            return Positive.class;
+          } 
+          if (intValue < 0) {
+            return Negative.class;
+          } 
+      }
+      
+      case LONG_LITERAL: {
+          long longValue = (Long) literal.getValue();
+          if (longValue == 0) {
+              return Zero.class;
+          } 
+          if (longValue > 0) {
+              return Positive.class;
+          } 
+          if (longValue < 0) {
+              return Negative.class;
+          }
+      }
     }
     return Top.class;
   }

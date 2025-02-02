@@ -9,6 +9,7 @@ import org.checkerframework.checker.dividebyzero.qual.*;
 import org.checkerframework.common.basetype.BaseTypeChecker;
 import org.checkerframework.common.basetype.BaseTypeVisitor;
 
+
 public class DivByZeroVisitor extends BaseTypeVisitor<DivByZeroAnnotatedTypeFactory> {
 
   /** Set of operators we care about */
@@ -28,7 +29,22 @@ public class DivByZeroVisitor extends BaseTypeVisitor<DivByZeroAnnotatedTypeFact
    */
   private boolean errorAt(BinaryTree node) {
     // A BinaryTree can represent any binary operator, including + or -.
-    // TODO
+    if (DIVISION_OPERATORS.contains(node.getKind())) {  
+      ExpressionTree denominator = node.getRightOperand();
+      // System.out.println(denominator);
+      // System.out.println("Denominator: " + denominator);
+      // System.out.println("@Positive present: " + hasAnnotation(denominator, Positive.class));
+      // System.out.println("@Zero present: " + hasAnnotation(denominator, Zero.class));
+      // System.out.println("@Negative present: " + hasAnnotation(denominator, Negative.class));
+      // System.out.println("@Top present: " + hasAnnotation(denominator, Top.class));
+
+      if (hasAnnotation(denominator, Zero.class)
+      || hasAnnotation(denominator, Top.class)
+      || hasAnnotation(denominator, Bottom.class)) { 
+      return true;
+      }
+    }
+
     return false;
   }
 
@@ -42,7 +58,15 @@ public class DivByZeroVisitor extends BaseTypeVisitor<DivByZeroAnnotatedTypeFact
   private boolean errorAt(CompoundAssignmentTree node) {
     // A CompoundAssignmentTree represents any binary operator combined with an assignment,
     // such as "x += 10".
-    // TODO
+    if (DIVISION_OPERATORS.contains(node.getKind())) {  
+      ExpressionTree denominator = node.getExpression();
+      
+      if (hasAnnotation(denominator, Zero.class)
+      || hasAnnotation(denominator, Top.class)
+      || hasAnnotation(denominator, Bottom.class)) { 
+      return true;
+      }
+    }
     return false;
   }
 
