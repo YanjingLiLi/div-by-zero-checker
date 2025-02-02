@@ -89,11 +89,9 @@ public class DivByZeroTransfer extends CFTransfer {
         if (equal(rhs, reflect(Zero.class))) {
           if (equal(lhs, reflect(NonNegative.class))) {
               return glb(lhs, reflect(Positive.class));
-          }
-          if (equal(lhs, reflect(NonPositive.class))) {
+          } else if (equal(lhs, reflect(NonPositive.class))) {
               return glb(lhs, reflect(Negative.class));
-          }
-          if (equal(lhs, reflect(Top.class))) {
+          } else { // only place to use PositiveNegative
             return glb(lhs, reflect(PositiveNegative.class));
         }
       }
